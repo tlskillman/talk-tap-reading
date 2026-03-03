@@ -100,7 +100,7 @@ function App() {
       }
 
       const utterance = new SpeechSynthesisUtterance(wordsCopy[idx]);
-      utterance.rate = 0.85;
+      utterance.rate = settings.readBackRate;
       const currentIdx = idx;
       utterance.onstart = () => setHighlightIndex(currentIdx);
       utterance.onend = () => {
@@ -112,7 +112,7 @@ function App() {
     };
 
     speakNext();
-  }, [words, isListening, stopListening, startListening]);
+  }, [words, isListening, stopListening, startListening, settings.readBackRate]);
 
   const handleClear = useCallback(() => {
     stopReadBack();
