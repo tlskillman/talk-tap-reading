@@ -25,6 +25,7 @@ function App() {
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [isReadingBack, setIsReadingBack] = useState(false);
   const readingBackRef = useRef(false);
+  const wasListeningRef = useRef(false);
 
   const words = finalTranscript
     ? finalTranscript.split(/\s+/).filter(Boolean)
@@ -36,7 +37,11 @@ function App() {
     setHighlightIndex(null);
     setIsReadingBack(false);
     setClickedIndex(null);
-  }, []);
+    if (wasListeningRef.current) {
+      wasListeningRef.current = false;
+      startListening();
+    }
+  }, [startListening]);
 
   const speakWord = useCallback(
     (word: string, index: number) => {
@@ -45,18 +50,31 @@ function App() {
       setIsReadingBack(false);
       setHighlightIndex(null);
 
+      const wasOn = isListening;
+      if (wasOn) stopListening();
+
       const utterance = new SpeechSynthesisUtterance(word);
       utterance.rate = 0.9;
       utterance.onstart = () => setClickedIndex(index);
-      utterance.onend = () => setClickedIndex(null);
-      utterance.onerror = () => setClickedIndex(null);
+      utterance.onend = () => {
+        setClickedIndex(null);
+        if (wasOn) startListening();
+      };
+      utterance.onerror = () => {
+        setClickedIndex(null);
+        if (wasOn) startListening();
+      };
       window.speechSynthesis.speak(utterance);
     },
-    [],
+    [isListening, stopListening, startListening],
   );
 
   const startReadBack = useCallback(() => {
     if (words.length === 0) return;
+
+    wasListeningRef.current = isListening;
+    if (isListening) stopListening();
+
     window.speechSynthesis.cancel();
     readingBackRef.current = true;
     setIsReadingBack(true);
@@ -65,11 +83,19 @@ function App() {
     const wordsCopy = [...words];
     let idx = 0;
 
+    const finishReadBack = () => {
+      readingBackRef.current = false;
+      setHighlightIndex(null);
+      setIsReadingBack(false);
+      if (wasListeningRef.current) {
+        wasListeningRef.current = false;
+        startListening();
+      }
+    };
+
     const speakNext = () => {
       if (!readingBackRef.current || idx >= wordsCopy.length) {
-        readingBackRef.current = false;
-        setHighlightIndex(null);
-        setIsReadingBack(false);
+        finishReadBack();
         return;
       }
 
@@ -81,16 +107,12 @@ function App() {
         idx++;
         speakNext();
       };
-      utterance.onerror = () => {
-        readingBackRef.current = false;
-        setHighlightIndex(null);
-        setIsReadingBack(false);
-      };
+      utterance.onerror = () => finishReadBack();
       window.speechSynthesis.speak(utterance);
     };
 
     speakNext();
-  }, [words]);
+  }, [words, isListening, stopListening, startListening]);
 
   const handleClear = useCallback(() => {
     stopReadBack();
