@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const SpeechRecognitionCtor: (new () => SpeechRecognition) | null =
+const SpeechRecognitionCtor =
   typeof window !== 'undefined'
     ? window.SpeechRecognition ?? window.webkitSpeechRecognition ?? null
     : null;
