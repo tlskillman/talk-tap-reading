@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 import { SettingsPanel } from './components/SettingsPanel';
 import { ReadingArea } from './components/ReadingArea';
@@ -26,6 +26,8 @@ function App() {
   const [isReadingBack, setIsReadingBack] = useState(false);
   const readingBackRef = useRef(false);
   const wasListeningRef = useRef(false);
+  const readBackRateRef = useRef(settings.readBackRate);
+  useEffect(() => { readBackRateRef.current = settings.readBackRate; }, [settings.readBackRate]);
 
   const words = finalTranscript
     ? finalTranscript.split(/\s+/).filter(Boolean)
@@ -100,7 +102,7 @@ function App() {
       }
 
       const utterance = new SpeechSynthesisUtterance(wordsCopy[idx]);
-      utterance.rate = settings.readBackRate;
+      utterance.rate = readBackRateRef.current;
       const currentIdx = idx;
       utterance.onstart = () => setHighlightIndex(currentIdx);
       utterance.onend = () => {
@@ -112,7 +114,7 @@ function App() {
     };
 
     speakNext();
-  }, [words, isListening, stopListening, startListening, settings.readBackRate]);
+  }, [words, isListening, stopListening, startListening]);
 
   const handleClear = useCallback(() => {
     stopReadBack();
