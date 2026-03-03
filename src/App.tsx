@@ -121,15 +121,13 @@ function App() {
     <div className="app">
       <header className="top-bar">
         <h1 className="app-title">Talk &amp; Tap Reading</h1>
-        <div
-          className={`status-indicator ${isListening ? (isRetrying ? 'retrying' : 'listening') : ''}`}
-        >
-          {isListening
-            ? isRetrying
-              ? '🔄 Connecting to speech service…'
-              : '🎙️ Listening'
-            : '⏸️ Not listening'}
-        </div>
+        {(isListening || isRetrying) && (
+          <div
+            className={`status-indicator ${isRetrying ? 'retrying' : 'listening'}`}
+          >
+            {isRetrying ? '🔄 Connecting…' : '🎙️ Listening'}
+          </div>
+        )}
       </header>
 
       {error && (
@@ -142,7 +140,7 @@ function App() {
         <div className="primary-controls">
           {!isListening ? (
             <button className="btn btn-start" onClick={startListening}>
-              Start Listening
+              Listen
             </button>
           ) : (
             <button className="btn btn-stop" onClick={stopListening}>
@@ -156,7 +154,7 @@ function App() {
               onClick={startReadBack}
               disabled={words.length === 0}
             >
-              Read It Back
+              Read
             </button>
           ) : (
             <button className="btn btn-stop-reading" onClick={stopReadBack}>
@@ -180,7 +178,7 @@ function App() {
               checked={showWordBoxes}
               onChange={e => setShowWordBoxes(e.target.checked)}
             />
-            <span>Show word boxes</span>
+            <span>Show Boxes</span>
           </label>
         </div>
       </div>
