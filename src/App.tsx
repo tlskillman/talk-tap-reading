@@ -100,7 +100,7 @@ function App() {
       }
 
       const utterance = new SpeechSynthesisUtterance(wordsCopy[idx]);
-      utterance.rate = 0.85;
+      utterance.rate = 1.0;
       const currentIdx = idx;
       utterance.onstart = () => setHighlightIndex(currentIdx);
       utterance.onend = () => {
