@@ -5,7 +5,6 @@ export interface Settings {
   letterSpacing: number;
   maxWidthCh: number;
   fontFamily: string;
-  readBackRate: number;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -15,7 +14,6 @@ export const DEFAULT_SETTINGS: Settings = {
   letterSpacing: 0.03,
   maxWidthCh: 38,
   fontFamily: 'system-ui, -apple-system, sans-serif',
-  readBackRate: 0.85,
 };
 
 export const FONT_OPTIONS = [

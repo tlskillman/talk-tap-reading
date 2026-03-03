@@ -111,15 +111,6 @@ export function SettingsPanel({ settings, onChange, isOpen, onToggle }: Settings
               unit="ch"
               onChange={v => update('maxWidthCh', v)}
             />
-            <SliderRow
-              label="Word gap"
-              value={settings.readBackRate}
-              min={0.3}
-              max={1.5}
-              step={0.05}
-              unit="×"
-              onChange={v => update('readBackRate', v)}
-            />
             <div className="settings-row">
               <label className="settings-label">
                 <span>Font</span>

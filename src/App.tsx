@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 import { SettingsPanel } from './components/SettingsPanel';
 import { ReadingArea } from './components/ReadingArea';
@@ -26,9 +26,6 @@ function App() {
   const [isReadingBack, setIsReadingBack] = useState(false);
   const readingBackRef = useRef(false);
   const wasListeningRef = useRef(false);
-  const readBackRateRef = useRef(settings.readBackRate);
-  const gapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => { readBackRateRef.current = settings.readBackRate; }, [settings.readBackRate]);
 
   const words = finalTranscript
     ? finalTranscript.split(/\s+/).filter(Boolean)
@@ -36,7 +33,6 @@ function App() {
 
   const stopReadBack = useCallback(() => {
     readingBackRef.current = false;
-    if (gapTimerRef.current) { clearTimeout(gapTimerRef.current); gapTimerRef.current = null; }
     window.speechSynthesis.cancel();
     setHighlightIndex(null);
     setIsReadingBack(false);
@@ -91,7 +87,6 @@ function App() {
       readingBackRef.current = false;
       setHighlightIndex(null);
       setIsReadingBack(false);
-      if (gapTimerRef.current) { clearTimeout(gapTimerRef.current); gapTimerRef.current = null; }
       if (wasListeningRef.current) {
         wasListeningRef.current = false;
         startListening();
@@ -105,13 +100,12 @@ function App() {
       }
 
       const utterance = new SpeechSynthesisUtterance(wordsCopy[idx]);
-      utterance.rate = 0.9;
+      utterance.rate = 0.85;
       const currentIdx = idx;
       utterance.onstart = () => setHighlightIndex(currentIdx);
       utterance.onend = () => {
         idx++;
-        const gap = Math.round(1000 / readBackRateRef.current);
-        gapTimerRef.current = setTimeout(speakNext, gap);
+        speakNext();
       };
       utterance.onerror = () => finishReadBack();
       window.speechSynthesis.speak(utterance);
