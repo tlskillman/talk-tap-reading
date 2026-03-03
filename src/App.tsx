@@ -27,6 +27,7 @@ function App() {
   const readingBackRef = useRef(false);
   const wasListeningRef = useRef(false);
   const readBackRateRef = useRef(settings.readBackRate);
+  const gapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => { readBackRateRef.current = settings.readBackRate; }, [settings.readBackRate]);
 
   const words = finalTranscript
@@ -35,6 +36,7 @@ function App() {
 
   const stopReadBack = useCallback(() => {
     readingBackRef.current = false;
+    if (gapTimerRef.current) { clearTimeout(gapTimerRef.current); gapTimerRef.current = null; }
     window.speechSynthesis.cancel();
     setHighlightIndex(null);
     setIsReadingBack(false);
@@ -82,44 +84,40 @@ function App() {
     setIsReadingBack(true);
     setClickedIndex(null);
 
-    const fullText = words.join(' ');
-    const charOffsets: number[] = [];
-    let offset = 0;
-    for (const w of words) {
-      charOffsets.push(offset);
-      offset += w.length + 1;
-    }
+    const wordsCopy = [...words];
+    let idx = 0;
 
     const finishReadBack = () => {
       readingBackRef.current = false;
       setHighlightIndex(null);
       setIsReadingBack(false);
+      if (gapTimerRef.current) { clearTimeout(gapTimerRef.current); gapTimerRef.current = null; }
       if (wasListeningRef.current) {
         wasListeningRef.current = false;
         startListening();
       }
     };
 
-    const utterance = new SpeechSynthesisUtterance(fullText);
-    utterance.rate = readBackRateRef.current;
-
-    utterance.onboundary = (event: SpeechSynthesisEvent) => {
-      if (event.name === 'word') {
-        const charIdx = event.charIndex;
-        let wordIdx = 0;
-        for (let i = charOffsets.length - 1; i >= 0; i--) {
-          if (charIdx >= charOffsets[i]) {
-            wordIdx = i;
-            break;
-          }
-        }
-        setHighlightIndex(wordIdx);
+    const speakNext = () => {
+      if (!readingBackRef.current || idx >= wordsCopy.length) {
+        finishReadBack();
+        return;
       }
+
+      const utterance = new SpeechSynthesisUtterance(wordsCopy[idx]);
+      utterance.rate = 0.9;
+      const currentIdx = idx;
+      utterance.onstart = () => setHighlightIndex(currentIdx);
+      utterance.onend = () => {
+        idx++;
+        const gap = Math.round(300 / readBackRateRef.current);
+        gapTimerRef.current = setTimeout(speakNext, gap);
+      };
+      utterance.onerror = () => finishReadBack();
+      window.speechSynthesis.speak(utterance);
     };
 
-    utterance.onend = () => finishReadBack();
-    utterance.onerror = () => finishReadBack();
-    window.speechSynthesis.speak(utterance);
+    speakNext();
   }, [words, isListening, stopListening, startListening]);
 
   const handleClear = useCallback(() => {
