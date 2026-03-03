@@ -105,12 +105,12 @@ function App() {
       }
 
       const utterance = new SpeechSynthesisUtterance(wordsCopy[idx]);
-      utterance.rate = readBackRateRef.current;
+      utterance.rate = 0.9;
       const currentIdx = idx;
       utterance.onstart = () => setHighlightIndex(currentIdx);
       utterance.onend = () => {
         idx++;
-        const gap = Math.round(800 / readBackRateRef.current);
+        const gap = Math.round(1000 / readBackRateRef.current);
         gapTimerRef.current = setTimeout(speakNext, gap);
       };
       utterance.onerror = () => finishReadBack();

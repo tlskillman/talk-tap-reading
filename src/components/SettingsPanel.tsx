@@ -112,7 +112,7 @@ export function SettingsPanel({ settings, onChange, isOpen, onToggle }: Settings
               onChange={v => update('maxWidthCh', v)}
             />
             <SliderRow
-              label="Read speed"
+              label="Word gap"
               value={settings.readBackRate}
               min={0.3}
               max={1.5}
