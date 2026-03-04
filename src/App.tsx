@@ -193,16 +193,7 @@ function App() {
           </button>
         </div>
 
-        <div className="secondary-controls">
-          <label className="toggle-label">
-            <input
-              type="checkbox"
-              checked={showWordBoxes}
-              onChange={e => setShowWordBoxes(e.target.checked)}
-            />
-            <span>Show Boxes</span>
-          </label>
-        </div>
+        {/* Show Boxes toggle hidden — boxes always on */}
       </div>
 
       <SettingsPanel
