@@ -20,7 +20,7 @@ function App() {
 
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [showWordBoxes, setShowWordBoxes] = useState(false);
+  const [showWordBoxes, setShowWordBoxes] = useState(true);
   const [highlightIndex, setHighlightIndex] = useState<number | null>(null);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
   const [isReadingBack, setIsReadingBack] = useState(false);

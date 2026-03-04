@@ -35,7 +35,7 @@ export function ReadingArea({
     <div className="reading-card">
       <div className="reading-area" style={readingStyle}>
         {!hasContent && (
-          <p className="placeholder-text">See your words.</p>
+          <p className="placeholder-text">See your words. Tap to hear.</p>
         )}
 
         {words.map((word, i) => {
