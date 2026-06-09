@@ -143,10 +143,15 @@ function ParentsTeachersContent() {
           an editor). Open the page directly in Chrome or Edge.
         </li>
         <li>
-          On phones and tablets, Chrome has a <strong>per-site</strong> microphone
-          setting (lock or menu icon next to the address bar). Allowing the microphone
-          in Chrome&rsquo;s main app settings is not always enough — this website must
-          be allowed too.
+          On <strong>iPhone and iPad</strong>, <strong>Talk</strong> only works in{' '}
+          <strong>Safari</strong>. Other browsers (Chrome, Firefox, Edge) can use the
+          microphone but Apple blocks speech recognition outside Safari.{' '}
+          <strong>Tap</strong> and <strong>New</strong> work in any browser.
+        </li>
+        <li>
+          On Android, Chrome has a <strong>per-site</strong> microphone setting (lock
+          or menu icon next to the address bar). Allowing the microphone in Chrome&rsquo;s
+          main app settings is not always enough — this website must be allowed too.
         </li>
       </ul>
     </div>

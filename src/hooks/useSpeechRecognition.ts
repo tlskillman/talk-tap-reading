@@ -3,6 +3,10 @@ import {
   microphoneDeniedMessage,
   requestMicrophoneAccess,
 } from '../utils/microphoneAccess';
+import {
+  iosNonSafariTalkMessage,
+  isIOSNonSafariBrowser,
+} from '../utils/speechEnvironment';
 
 const SpeechRecognitionCtor =
   typeof window !== 'undefined'
@@ -141,9 +145,11 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
 
         case 'service-not-allowed':
           setError(
-            'Speech recognition is not allowed on this browser or device. Use the ' +
-              'full Chrome or Edge app (not an in-app browser), allow the microphone ' +
-              'for this site in browser settings, then reload and press Talk again.',
+            isIOSNonSafariBrowser()
+              ? iosNonSafariTalkMessage()
+              : 'Speech recognition is not allowed on this browser or device. Use the ' +
+                  'full Chrome or Edge app (not an in-app browser), allow the microphone ' +
+                  'for this site in browser settings, then reload and press Talk again.',
           );
           wantListeningRef.current = false;
           clearTimer();
@@ -213,17 +219,16 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
       setIsRetrying(false);
       retryCountRef.current = 0;
       wantListeningRef.current = true;
-      setIsListening(true);
       clearTimer();
 
       void requestMicrophoneAccess().then(granted => {
         if (!wantListeningRef.current) return;
         if (!granted) {
           wantListeningRef.current = false;
-          setIsListening(false);
           setError(microphoneDeniedMessage());
           return;
         }
+        setIsListening(true);
         try {
           rec.start();
         } catch {

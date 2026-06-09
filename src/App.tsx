@@ -144,7 +144,9 @@ function App() {
               type="button"
               className="btn btn-talk"
               onClick={startListening}
+              disabled={speechEnv.talkUnavailable}
               aria-label="Talk: speak words into the app"
+              title={speechEnv.talkUnavailable ? speechEnv.reason ?? undefined : undefined}
             >
               <img src={ICON_LISTEN} alt="" className="btn-label-icon" />
               <span>Talk</span>
