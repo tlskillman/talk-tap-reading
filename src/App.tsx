@@ -1,9 +1,15 @@
-import { useState, useRef, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
+import { useSpeechPlayback } from './hooks/useSpeechPlayback';
+import { usePersistedSettings } from './hooks/usePersistedSettings';
 import { SettingsPanel } from './components/SettingsPanel';
 import { ReadingArea } from './components/ReadingArea';
-import { DEFAULT_SETTINGS, type Settings } from './types';
+import { detectSpeechEnvironment } from './utils/speechEnvironment';
 import './App.css';
+
+function transcriptToWords(transcript: string): string[] {
+  return transcript ? transcript.split(/\s+/).filter(Boolean) : [];
+}
 
 function App() {
   const {
@@ -14,105 +20,39 @@ function App() {
     startListening,
     stopListening,
     clearTranscript,
+    commitInterim,
+    dismissError,
     isSupported,
     error,
   } = useSpeechRecognition();
 
-  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+  const [settings, setSettings] = usePersistedSettings();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [showWordBoxes, setShowWordBoxes] = useState(true);
-  const [highlightIndex, setHighlightIndex] = useState<number | null>(null);
-  const [clickedIndex, setClickedIndex] = useState<number | null>(null);
-  const [isReadingBack, setIsReadingBack] = useState(false);
-  const readingBackRef = useRef(false);
-  const wasListeningRef = useRef(false);
 
-  const words = finalTranscript
-    ? finalTranscript.split(/\s+/).filter(Boolean)
-    : [];
+  const speechEnv = useMemo(() => detectSpeechEnvironment(), []);
+  const [envWarningDismissed, setEnvWarningDismissed] = useState(false);
+  const showEnvWarning = speechEnv.likelyBlocked && !envWarningDismissed;
 
-  const stopReadBack = useCallback(() => {
-    readingBackRef.current = false;
-    window.speechSynthesis.cancel();
-    setHighlightIndex(null);
-    setIsReadingBack(false);
-    setClickedIndex(null);
-    if (wasListeningRef.current) {
-      wasListeningRef.current = false;
-      startListening();
-    }
-  }, [startListening]);
+  const {
+    highlightIndex,
+    clickedIndex,
+    isReadingBack,
+    speakWord,
+    startReadBack,
+    stopReadBack,
+  } = useSpeechPlayback({ isListening, startListening, stopListening });
 
-  const speakWord = useCallback(
-    (word: string, index: number) => {
-      window.speechSynthesis.cancel();
-      readingBackRef.current = false;
-      setIsReadingBack(false);
-      setHighlightIndex(null);
-
-      const wasOn = isListening;
-      if (wasOn) stopListening();
-
-      const utterance = new SpeechSynthesisUtterance(word);
-      utterance.rate = 0.9;
-      utterance.onstart = () => setClickedIndex(index);
-      utterance.onend = () => {
-        setClickedIndex(null);
-        if (wasOn) startListening();
-      };
-      utterance.onerror = () => {
-        setClickedIndex(null);
-        if (wasOn) startListening();
-      };
-      window.speechSynthesis.speak(utterance);
-    },
-    [isListening, stopListening, startListening],
+  const words = useMemo(
+    () => transcriptToWords(finalTranscript),
+    [finalTranscript],
   );
 
-  const startReadBack = useCallback(() => {
-    if (words.length === 0) return;
+  const hasReadableContent = words.length > 0 || !!interimTranscript;
 
-    wasListeningRef.current = isListening;
-    if (isListening) stopListening();
-
-    window.speechSynthesis.cancel();
-    readingBackRef.current = true;
-    setIsReadingBack(true);
-    setClickedIndex(null);
-
-    const wordsCopy = [...words];
-    let idx = 0;
-
-    const finishReadBack = () => {
-      readingBackRef.current = false;
-      setHighlightIndex(null);
-      setIsReadingBack(false);
-      if (wasListeningRef.current) {
-        wasListeningRef.current = false;
-        startListening();
-      }
-    };
-
-    const speakNext = () => {
-      if (!readingBackRef.current || idx >= wordsCopy.length) {
-        finishReadBack();
-        return;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(wordsCopy[idx]);
-      utterance.rate = 1.0;
-      const currentIdx = idx;
-      utterance.onstart = () => setHighlightIndex(currentIdx);
-      utterance.onend = () => {
-        idx++;
-        speakNext();
-      };
-      utterance.onerror = () => finishReadBack();
-      window.speechSynthesis.speak(utterance);
-    };
-
-    speakNext();
-  }, [words, isListening, stopListening, startListening]);
+  const handleReadBack = useCallback(() => {
+    const transcript = commitInterim();
+    startReadBack(transcriptToWords(transcript));
+  }, [commitInterim, startReadBack]);
 
   const handleClear = useCallback(() => {
     stopReadBack();
@@ -152,9 +92,31 @@ function App() {
         )}
       </header>
 
+      {showEnvWarning && (
+        <div className="warning-banner" role="status">
+          <span className="warning-banner-text">{speechEnv.reason}</span>
+          <button
+            type="button"
+            className="warning-banner-dismiss"
+            onClick={() => setEnvWarningDismissed(true)}
+            aria-label="Dismiss warning"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {error && (
         <div className="error-banner" role="alert">
-          {error}
+          <span className="error-banner-text">{error}</span>
+          <button
+            type="button"
+            className="error-banner-dismiss"
+            onClick={dismissError}
+            aria-label="Dismiss error"
+          >
+            ×
+          </button>
         </div>
       )}
 
@@ -173,8 +135,8 @@ function App() {
           {!isReadingBack ? (
             <button
               className="btn btn-readback"
-              onClick={startReadBack}
-              disabled={words.length === 0}
+              onClick={handleReadBack}
+              disabled={!hasReadableContent}
             >
               Read
             </button>
@@ -187,13 +149,11 @@ function App() {
           <button
             className="btn btn-clear"
             onClick={handleClear}
-            disabled={words.length === 0 && !interimTranscript}
+            disabled={!hasReadableContent}
           >
             Clear
           </button>
         </div>
-
-        {/* Show Boxes toggle hidden — boxes always on */}
       </div>
 
       <SettingsPanel
@@ -209,7 +169,6 @@ function App() {
         highlightIndex={highlightIndex}
         clickedIndex={clickedIndex}
         settings={settings}
-        showWordBoxes={showWordBoxes}
         onWordClick={speakWord}
       />
     </div>

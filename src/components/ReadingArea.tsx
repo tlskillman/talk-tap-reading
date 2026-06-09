@@ -7,7 +7,6 @@ interface ReadingAreaProps {
   highlightIndex: number | null;
   clickedIndex: number | null;
   settings: Settings;
-  showWordBoxes: boolean;
   onWordClick: (word: string, index: number) => void;
 }
 
@@ -17,7 +16,6 @@ export function ReadingArea({
   highlightIndex,
   clickedIndex,
   settings,
-  showWordBoxes,
   onWordClick,
 }: ReadingAreaProps) {
   const readingStyle: CSSProperties = {
@@ -41,8 +39,7 @@ export function ReadingArea({
         {words.map((word, i) => {
           const isHighlighted = highlightIndex === i;
           const isClicked = clickedIndex === i;
-          let cls = 'word-token';
-          if (showWordBoxes) cls += ' word-boxed';
+          let cls = 'word-token word-boxed';
           if (isHighlighted) cls += ' word-highlighted';
           if (isClicked) cls += ' word-clicked';
 

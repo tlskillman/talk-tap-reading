@@ -41,7 +41,6 @@ declare global {
     abort(): void;
   }
 
-  // eslint-disable-next-line no-var
   var SpeechRecognition: { new (): SpeechRecognition; prototype: SpeechRecognition } | undefined;
 
   interface Window {
