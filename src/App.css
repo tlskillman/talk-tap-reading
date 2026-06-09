@@ -35,9 +35,11 @@
 }
 
 .app-logo {
-  height: 10rem;
+  height: auto;
   width: auto;
+  max-height: 10rem;
   max-width: 100%;
+  object-fit: contain;
   display: block;
 }
 
@@ -619,7 +621,7 @@
   }
 
   .app-logo {
-    height: 6.5rem;
+    max-height: 6.5rem;
   }
 
   .controls-row {
