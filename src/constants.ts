@@ -5,3 +5,6 @@ export function sentenceToWords(sentence: string): string[] {
 }
 
 export const SAMPLE_WORDS = sentenceToWords(SAMPLE_SENTENCE);
+
+export const ICON_LISTEN = `${import.meta.env.BASE_URL}icon-listen.png`;
+export const ICON_READ = `${import.meta.env.BASE_URL}icon-read.png`;

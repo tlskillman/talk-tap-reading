@@ -6,7 +6,7 @@ import { SettingsPanel } from './components/SettingsPanel';
 import { ReadingArea } from './components/ReadingArea';
 import { AppBrand } from './components/AppBrand';
 import { detectSpeechEnvironment } from './utils/speechEnvironment';
-import { SAMPLE_WORDS, sentenceToWords } from './constants';
+import { SAMPLE_WORDS, sentenceToWords, ICON_LISTEN, ICON_READ } from './constants';
 import './App.css';
 
 function App() {
@@ -134,8 +134,13 @@ function App() {
       <div className="controls-row">
         <div className="primary-controls">
           {!isListening ? (
-            <button className="btn btn-start" onClick={startListening}>
-              Listen
+            <button
+              type="button"
+              className="btn btn-icon"
+              onClick={startListening}
+              aria-label="Listen"
+            >
+              <img src={ICON_LISTEN} alt="" className="btn-icon-img" />
             </button>
           ) : (
             <button className="btn btn-stop" onClick={stopListening}>
@@ -145,11 +150,13 @@ function App() {
 
           {!isReadingBack ? (
             <button
-              className="btn btn-readback"
+              type="button"
+              className="btn btn-icon"
               onClick={handleReadBack}
               disabled={!hasReadableContent}
+              aria-label="Read"
             >
-              Read
+              <img src={ICON_READ} alt="" className="btn-icon-img" />
             </button>
           ) : (
             <button className="btn btn-stop-reading" onClick={stopReadBack}>

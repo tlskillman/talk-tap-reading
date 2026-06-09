@@ -242,11 +242,29 @@
   cursor: not-allowed;
 }
 
-.btn-start {
-  background: #22c55e;
+.btn-icon {
+  padding: 0.35rem;
+  min-width: 56px;
+  min-height: 56px;
+  width: 56px;
+  height: 56px;
+  background: #ffffff;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  color: inherit;
 }
-.btn-start:hover:not(:disabled) {
-  background: #16a34a;
+
+.btn-icon:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+.btn-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
 }
 
 .btn-stop {
