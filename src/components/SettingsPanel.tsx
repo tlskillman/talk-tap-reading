@@ -61,44 +61,70 @@ function ParentsTeachersContent() {
 
       <h3>What it does</h3>
       <p>
-        A child speaks a sentence, sees the words appear, then taps any word to hear
-        it spoken back. The goal is to reinforce the connection between the printed
-        word and the sound of the word.
+        A child talks, sees their words appear, then taps any word to hear it spoken
+        back. The goal is to reinforce the connection between the printed word and the
+        sound of the word.
       </p>
 
       <h3>How to use</h3>
+      <p>
+        The main buttons use the child&rsquo;s actions — <strong>Talk</strong> and{' '}
+        <strong>Tap</strong> — not what the app is doing behind the scenes.
+      </p>
       <ol>
         <li>
-          On first visit, sample words appear in the reading area. The child can tap
-          them to hear how it works, or press <strong>Listen</strong> and speak a
+          On first visit, sample words appear: <em>Talk. See words. Tap to hear.</em>{' '}
+          The child can tap them to try it, or press <strong>Talk</strong> and speak a
           sentence.
         </li>
-        <li>Tap any word in any order to hear it again.</li>
-        <li>Press <strong>Read</strong> to hear all words in sequence.</li>
+        <li>Tap any word in the reading area, in any order, to hear it again.</li>
+        <li>
+          Press <strong>Tap</strong> to hear all words in sequence, one at a time with
+          highlighting.
+        </li>
         <li>
           Press <strong>New</strong> to clear the sentence and start over with the
           sample words.
         </li>
       </ol>
 
+      <h3>What the buttons mean</h3>
+      <ul>
+        <li>
+          <strong>Talk</strong> — turns on speech recognition so the child can speak
+          words into the app.
+        </li>
+        <li>
+          <strong>Tap</strong> — reads all words aloud in order (the child can also tap
+          individual words anytime without pressing this button).
+        </li>
+        <li>
+          <strong>Stop</strong> — ends talking or stops the Tap sequence.
+        </li>
+        <li>
+          <strong>New</strong> — clears the current sentence and brings back the sample
+          words.
+        </li>
+      </ul>
+
       <h3>Privacy</h3>
       <ul>
         <li>
-          This app has no server and does not store or upload sentences you speak or
-          display.
+          This app has no server and does not store or upload sentences the child
+          speaks or displays.
         </li>
         <li>
           Display settings (font size, spacing, etc.) are saved only in this browser
           on this device.
         </li>
         <li>
-          <strong>Listen</strong> uses your browser&rsquo;s speech recognition, which
+          <strong>Talk</strong> uses your browser&rsquo;s speech recognition, which
           sends audio to a cloud service (Google in Chrome, Microsoft in Edge) to
           convert speech to text.
         </li>
         <li>
-          Tap-to-hear and <strong>Read</strong> use text-to-speech built into your
-          browser, which runs on your device.
+          Tapping a word and pressing <strong>Tap</strong> use text-to-speech built
+          into your browser, which runs on your device.
         </li>
       </ul>
 
@@ -106,11 +132,11 @@ function ParentsTeachersContent() {
       <ul>
         <li>Works best in Google Chrome or Microsoft Edge on a desktop or tablet.</li>
         <li>
-          <strong>Listen</strong> requires a microphone and an internet connection.
+          <strong>Talk</strong> requires a microphone and an internet connection.
         </li>
         <li>
-          Tap-to-hear and <strong>Read</strong> work without a microphone once words
-          are on screen.
+          Tapping words and pressing <strong>Tap</strong> work without a microphone once
+          words are on screen.
         </li>
         <li>
           Speech recognition may fail in embedded browser previews (for example, inside

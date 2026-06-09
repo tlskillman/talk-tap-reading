@@ -6,7 +6,13 @@ import { SettingsPanel } from './components/SettingsPanel';
 import { ReadingArea } from './components/ReadingArea';
 import { AppBrand } from './components/AppBrand';
 import { detectSpeechEnvironment } from './utils/speechEnvironment';
-import { SAMPLE_WORDS, sentenceToWords, ICON_LISTEN, ICON_READ } from './constants';
+import {
+  SAMPLE_WORDS,
+  sentenceToWords,
+  ICON_LISTEN,
+  ICON_READ,
+  ICON_NEW,
+} from './constants';
 import './App.css';
 
 function App() {
@@ -98,7 +104,7 @@ function App() {
           <div
             className={`status-indicator ${isRetrying ? 'retrying' : 'listening'}`}
           >
-            {isRetrying ? '🔄 Connecting…' : '🎙️ Listening'}
+            {isRetrying ? '🔄 Connecting…' : '🎙️ Talking'}
           </div>
         )}
       </header>
@@ -136,11 +142,12 @@ function App() {
           {!isListening ? (
             <button
               type="button"
-              className="btn btn-icon"
+              className="btn btn-talk"
               onClick={startListening}
-              aria-label="Listen"
+              aria-label="Talk: speak words into the app"
             >
-              <img src={ICON_LISTEN} alt="" className="btn-icon-img" />
+              <img src={ICON_LISTEN} alt="" className="btn-label-icon" />
+              <span>Talk</span>
             </button>
           ) : (
             <button className="btn btn-stop" onClick={stopListening}>
@@ -151,25 +158,29 @@ function App() {
           {!isReadingBack ? (
             <button
               type="button"
-              className="btn btn-icon"
+              className="btn btn-tap"
               onClick={handleReadBack}
               disabled={!hasReadableContent}
-              aria-label="Read"
+              aria-label="Tap: hear words spoken one at a time"
             >
-              <img src={ICON_READ} alt="" className="btn-icon-img" />
+              <img src={ICON_READ} alt="" className="btn-label-icon" />
+              <span>Tap</span>
             </button>
           ) : (
             <button className="btn btn-stop-reading" onClick={stopReadBack}>
-              Stop Reading
+              Stop
             </button>
           )}
 
           <button
+            type="button"
             className="btn btn-new"
             onClick={handleNew}
             disabled={!hasUserContent}
+            aria-label="New: start over with sample words"
           >
-            New
+            <img src={ICON_NEW} alt="" className="btn-label-icon" />
+            <span>New</span>
           </button>
         </div>
       </div>

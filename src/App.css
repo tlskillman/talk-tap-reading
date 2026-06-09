@@ -242,29 +242,43 @@
   cursor: not-allowed;
 }
 
-.btn-icon {
-  padding: 0.35rem;
-  min-width: 56px;
-  min-height: 56px;
-  width: 56px;
-  height: 56px;
+.btn-talk,
+.btn-tap,
+.btn-new {
+  gap: 0.5rem;
+  padding: 0.45rem 1rem 0.45rem 0.65rem;
   background: #ffffff;
-  border: 2px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  color: inherit;
+  font-weight: 700;
 }
 
-.btn-icon:hover:not(:disabled) {
-  background: #f9fafb;
-  border-color: rgba(0, 0, 0, 0.14);
+.btn-talk {
+  border: 2px solid #22c55e;
+  color: #166534;
 }
 
-.btn-icon-img {
-  width: 100%;
-  height: 100%;
+.btn-talk:hover:not(:disabled) {
+  background: #f0fdf4;
+  border-color: #16a34a;
+}
+
+.btn-tap {
+  border: 2px solid #7c3aed;
+  color: #5b21b6;
+}
+
+.btn-tap:hover:not(:disabled) {
+  background: #f5f3ff;
+  border-color: #6d28d9;
+}
+
+.btn-label-icon {
+  width: 2rem;
+  height: 2rem;
   object-fit: contain;
   display: block;
   pointer-events: none;
+  flex-shrink: 0;
 }
 
 .btn-stop {
@@ -289,13 +303,12 @@
 }
 
 .btn-new {
-  background: transparent;
-  color: #6b7280;
-  border: 2px solid #d1d5db;
+  border: 2px solid #94a3b8;
+  color: #334155;
 }
 .btn-new:hover:not(:disabled) {
-  border-color: #9ca3af;
-  color: #374151;
+  background: #f8fafc;
+  border-color: #64748b;
 }
 
 /* ── Toggle ── */

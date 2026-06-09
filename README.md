@@ -1,29 +1,29 @@
 # Talk & Tap Reading
 
-A small experimental reading-support tool. A child speaks a sentence, sees the words appear, then taps any word to hear it spoken back. The goal is to reinforce the connection between the printed word and the sound of the word.
+A small experimental reading-support tool. A child talks, sees their words appear, then taps any word to hear it spoken back. The main buttons are **Talk** and **Tap** — the child's actions, not the app's. The goal is to reinforce the connection between the printed word and the sound of the word.
 
 This is not a medical or educational treatment and does not claim to diagnose or treat dyslexia.
 
 ## Features
 
-- **Tap sample words** — on first visit, tappable demo words appear immediately
-- **Listen** — continuous speech recognition with live interim text
-- **Tap** — hear any word spoken individually, in any order
-- **Read** — sequential read-back with word highlighting
+- **Tap sample words** — on first visit, tappable demo words appear: *Talk. See words. Tap to hear.*
+- **Talk** — speech recognition with live interim text
+- **Tap words** — hear any word spoken individually, in any order
+- **Tap button** — sequential read-back with word highlighting
 - **New** — start a fresh sentence
 - **Settings** — adjustable font size, spacing, line width, and dyslexia-friendly fonts (persisted in the browser)
 - **For parents and teachers** — how to use, privacy, and known limitations
 
 ## Browser support
 
-Requires the Web Speech API (speech recognition and synthesis). Works best in **Google Chrome** or **Microsoft Edge** on desktop or tablet. Microphone access and an internet connection are required for **Listen**. Tap-to-hear and **Read** work without a microphone once words are on screen.
+Requires the Web Speech API (speech recognition and synthesis). Works best in **Google Chrome** or **Microsoft Edge** on desktop or tablet. Microphone access and an internet connection are required for **Talk**. Tapping words and the **Tap** button work without a microphone once words are on screen.
 
 ## Privacy
 
 - No server; sentences are not stored or uploaded by this app
 - Display settings are saved in the browser only (`localStorage`)
-- **Listen** sends audio to your browser vendor's cloud speech service (Google in Chrome, Microsoft in Edge)
-- Tap-to-hear and **Read** use your browser's built-in text-to-speech
+- **Talk** sends audio to your browser vendor's cloud speech service (Google in Chrome, Microsoft in Edge)
+- Tapping words and the **Tap** button use your browser's built-in text-to-speech
 
 ## Development
 

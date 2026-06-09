@@ -163,7 +163,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
             setError(
               'Could not reach the speech service. This usually means no internet ' +
                 'connection, or a VPN/firewall is blocking it. Check your connection ' +
-                'and click Listen to try again.',
+                'and press Talk to try again.',
             );
           } else {
             setIsRetrying(true);
