@@ -4,6 +4,7 @@ import { useSpeechPlayback } from './hooks/useSpeechPlayback';
 import { usePersistedSettings } from './hooks/usePersistedSettings';
 import { SettingsPanel } from './components/SettingsPanel';
 import { ReadingArea } from './components/ReadingArea';
+import { AppBrand } from './components/AppBrand';
 import { detectSpeechEnvironment } from './utils/speechEnvironment';
 import { SAMPLE_WORDS, sentenceToWords } from './constants';
 import './App.css';
@@ -74,7 +75,7 @@ function App() {
     return (
       <div className="app">
         <header className="top-bar">
-          <h1 className="app-title">Talk &amp; Tap Reading</h1>
+          <AppBrand />
         </header>
         <div className="unsupported-message">
           <h2>Browser Not Supported</h2>
@@ -92,17 +93,7 @@ function App() {
   return (
     <div className="app">
       <header className="top-bar">
-        <div className="top-bar-title">
-          <h1 className="app-title">Talk &amp; Tap Reading</h1>
-          <button
-            type="button"
-            className="help-button"
-            onClick={openHelp}
-            aria-label="Help for parents and teachers"
-          >
-            ?
-          </button>
-        </div>
+        <AppBrand showHelp onHelpClick={openHelp} />
         {(isListening || isRetrying) && (
           <div
             className={`status-indicator ${isRetrying ? 'retrying' : 'listening'}`}
