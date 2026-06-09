@@ -46,4 +46,4 @@ Pushes to `main` deploy automatically to GitHub Pages at `/talk-tap-reading/`.
 
 ## Feedback
 
-[Open an issue](https://github.com/tlskillman/talk-tap-reading/issues) on GitHub.
+Email [tskillman@immsci.com](mailto:tskillman@immsci.com?subject=Talk%20%26%20Tap%20Reading%20feedback).

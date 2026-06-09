@@ -208,11 +208,7 @@ function App() {
       <footer className="app-footer">
         <p>
           An experimental reading-support tool.{' '}
-          <a
-            href="https://github.com/tlskillman/talk-tap-reading/issues"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="mailto:tskillman@immsci.com?subject=Talk%20%26%20Tap%20Reading%20feedback">
             Send feedback
           </a>
         </p>
