@@ -1,4 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  microphoneDeniedMessage,
+  requestMicrophoneAccess,
+} from '../utils/microphoneAccess';
 
 const SpeechRecognitionCtor =
   typeof window !== 'undefined'
@@ -128,9 +132,18 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
     rec.onerror = (event: SpeechRecognitionErrorEvent) => {
       switch (event.error) {
         case 'not-allowed':
+          setError(microphoneDeniedMessage());
+          wantListeningRef.current = false;
+          clearTimer();
+          setIsListening(false);
+          setIsRetrying(false);
+          break;
+
         case 'service-not-allowed':
           setError(
-            'Microphone access was denied. Please allow microphone access in your browser settings.',
+            'Speech recognition is not allowed on this browser or device. Use the ' +
+              'full Chrome or Edge app (not an in-app browser), allow the microphone ' +
+              'for this site in browser settings, then reload and press Talk again.',
           );
           wantListeningRef.current = false;
           clearTimer();
@@ -202,11 +215,21 @@ export function useSpeechRecognition(): UseSpeechRecognitionReturn {
       wantListeningRef.current = true;
       setIsListening(true);
       clearTimer();
-      try {
-        rec.start();
-      } catch {
-        /* already running */
-      }
+
+      void requestMicrophoneAccess().then(granted => {
+        if (!wantListeningRef.current) return;
+        if (!granted) {
+          wantListeningRef.current = false;
+          setIsListening(false);
+          setError(microphoneDeniedMessage());
+          return;
+        }
+        try {
+          rec.start();
+        } catch {
+          /* already running */
+        }
+      });
     };
 
     stopRef.current = () => {

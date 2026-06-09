@@ -142,6 +142,12 @@ function ParentsTeachersContent() {
           Speech recognition may fail in embedded browser previews (for example, inside
           an editor). Open the page directly in Chrome or Edge.
         </li>
+        <li>
+          On phones and tablets, Chrome has a <strong>per-site</strong> microphone
+          setting (lock or menu icon next to the address bar). Allowing the microphone
+          in Chrome&rsquo;s main app settings is not always enough — this website must
+          be allowed too.
+        </li>
       </ul>
     </div>
   );
