@@ -37,17 +37,13 @@ function App() {
 
   const speechEnv = useMemo(() => detectSpeechEnvironment(), []);
   const [envWarningDismissed, setEnvWarningDismissed] = useState(false);
-  const [linkCopied, setLinkCopied] = useState(false);
-  const showEnvWarning = speechEnv.likelyBlocked && !envWarningDismissed;
+  // On iOS the "Use Safari" button carries the message, so skip the banner there.
+  const showEnvWarning =
+    speechEnv.likelyBlocked && !speechEnv.recommendSafari && !envWarningDismissed;
 
-  const copyPageLink = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setLinkCopied(true);
-      window.setTimeout(() => setLinkCopied(false), 2500);
-    } catch {
-      setLinkCopied(false);
-    }
+  const openInSafari = useCallback(() => {
+    // x-safari-https:// opens the current page in Safari from iOS Chrome/Edge.
+    window.location.href = `x-safari-${window.location.href}`;
   }, []);
 
   const {
@@ -123,15 +119,6 @@ function App() {
       {showEnvWarning && (
         <div className="warning-banner" role="status">
           <span className="warning-banner-text">{speechEnv.reason}</span>
-          {speechEnv.recommendSafari && (
-            <button
-              type="button"
-              className="warning-banner-action"
-              onClick={copyPageLink}
-            >
-              {linkCopied ? 'Link copied ✓' : 'Copy link'}
-            </button>
-          )}
           <button
             type="button"
             className="warning-banner-dismiss"
@@ -159,7 +146,17 @@ function App() {
 
       <div className="controls-row">
         <div className="primary-controls">
-          {!isListening ? (
+          {speechEnv.recommendSafari ? (
+            <button
+              type="button"
+              className="btn btn-talk"
+              onClick={openInSafari}
+              aria-label="Open this page in Safari to use Talk"
+            >
+              <img src={ICON_LISTEN} alt="" className="btn-label-icon" />
+              <span>Use Safari</span>
+            </button>
+          ) : !isListening ? (
             <button
               type="button"
               className="btn btn-talk"
