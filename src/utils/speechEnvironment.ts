@@ -8,6 +8,8 @@ export interface SpeechEnvironment {
   likelyBlocked: boolean;
   /** Disable the Talk button when Talk will not work in this environment. */
   talkUnavailable: boolean;
+  /** iOS non-Safari browser: Talk needs Safari, so offer an "open in Safari" nudge. */
+  recommendSafari: boolean;
   /** Human-readable explanation, or null when nothing is wrong. */
   reason: string | null;
 }
@@ -28,15 +30,21 @@ export function isIOSNonSafariBrowser(): boolean {
 
 export function iosNonSafariTalkMessage(): string {
   return (
-    'On iPhone and iPad, Talk only works in Safari. Chrome can use the microphone, ' +
-    'but Apple does not allow speech recognition in other iOS browsers. ' +
-    'Open this page in Safari and press Talk. Tap and New still work in Chrome.'
+    'To use Talk on iPhone or iPad, open this page in Safari — Apple only allows ' +
+    'speech recognition there, not in Chrome or other browsers. Tap and New still ' +
+    'work fine here. Use “Copy link,” then paste it into Safari.'
   );
 }
 
 export function detectSpeechEnvironment(): SpeechEnvironment {
   if (typeof window === 'undefined') {
-    return { hasApi: false, likelyBlocked: false, talkUnavailable: false, reason: null };
+    return {
+      hasApi: false,
+      likelyBlocked: false,
+      talkUnavailable: false,
+      recommendSafari: false,
+      reason: null,
+    };
   }
 
   const hasApi = !!(window.SpeechRecognition ?? window.webkitSpeechRecognition);
@@ -59,6 +67,7 @@ export function detectSpeechEnvironment(): SpeechEnvironment {
       hasApi,
       likelyBlocked: true,
       talkUnavailable: true,
+      recommendSafari: true,
       reason: iosNonSafariTalkMessage(),
     };
   }
@@ -68,6 +77,7 @@ export function detectSpeechEnvironment(): SpeechEnvironment {
       hasApi,
       likelyBlocked: true,
       talkUnavailable: true,
+      recommendSafari: false,
       reason: `This looks like an embedded preview (for example, an editor's built-in browser). Speech recognition needs Google's speech service, which isn't available here. ${DESKTOP_BROWSER_HINT}`,
     };
   }
@@ -77,9 +87,16 @@ export function detectSpeechEnvironment(): SpeechEnvironment {
       hasApi,
       likelyBlocked: true,
       talkUnavailable: true,
+      recommendSafari: false,
       reason: `Brave doesn't include the speech service this app relies on. ${DESKTOP_BROWSER_HINT}`,
     };
   }
 
-  return { hasApi, likelyBlocked: false, talkUnavailable: false, reason: null };
+  return {
+    hasApi,
+    likelyBlocked: false,
+    talkUnavailable: false,
+    recommendSafari: false,
+    reason: null,
+  };
 }

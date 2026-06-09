@@ -37,7 +37,18 @@ function App() {
 
   const speechEnv = useMemo(() => detectSpeechEnvironment(), []);
   const [envWarningDismissed, setEnvWarningDismissed] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   const showEnvWarning = speechEnv.likelyBlocked && !envWarningDismissed;
+
+  const copyPageLink = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setLinkCopied(true);
+      window.setTimeout(() => setLinkCopied(false), 2500);
+    } catch {
+      setLinkCopied(false);
+    }
+  }, []);
 
   const {
     highlightIndex,
@@ -112,6 +123,15 @@ function App() {
       {showEnvWarning && (
         <div className="warning-banner" role="status">
           <span className="warning-banner-text">{speechEnv.reason}</span>
+          {speechEnv.recommendSafari && (
+            <button
+              type="button"
+              className="warning-banner-action"
+              onClick={copyPageLink}
+            >
+              {linkCopied ? 'Link copied ✓' : 'Copy link'}
+            </button>
+          )}
           <button
             type="button"
             className="warning-banner-dismiss"
