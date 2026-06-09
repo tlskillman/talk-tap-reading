@@ -156,13 +156,6 @@ function App() {
         </div>
       </div>
 
-      <SettingsPanel
-        settings={settings}
-        onChange={setSettings}
-        isOpen={settingsOpen}
-        onToggle={() => setSettingsOpen(o => !o)}
-      />
-
       <ReadingArea
         words={words}
         interimTranscript={interimTranscript}
@@ -170,6 +163,13 @@ function App() {
         clickedIndex={clickedIndex}
         settings={settings}
         onWordClick={speakWord}
+      />
+
+      <SettingsPanel
+        settings={settings}
+        onChange={setSettings}
+        isOpen={settingsOpen}
+        onToggle={() => setSettingsOpen(o => !o)}
       />
     </div>
   );
