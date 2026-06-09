@@ -8,7 +8,7 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  fontSize: 44,
+  fontSize: 30,
   lineHeight: 1.7,
   wordSpacing: 0.25,
   letterSpacing: 0.03,
