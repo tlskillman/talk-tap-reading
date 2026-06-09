@@ -7,6 +7,7 @@ interface ReadingAreaProps {
   highlightIndex: number | null;
   clickedIndex: number | null;
   settings: Settings;
+  isSample?: boolean;
   onWordClick: (word: string, index: number) => void;
 }
 
@@ -16,6 +17,7 @@ export function ReadingArea({
   highlightIndex,
   clickedIndex,
   settings,
+  isSample = false,
   onWordClick,
 }: ReadingAreaProps) {
   const readingStyle: CSSProperties = {
@@ -27,19 +29,14 @@ export function ReadingArea({
     fontFamily: settings.fontFamily,
   };
 
-  const hasContent = words.length > 0 || interimTranscript;
-
   return (
     <div className="reading-card">
       <div className="reading-area" style={readingStyle}>
-        {!hasContent && (
-          <p className="placeholder-text">See your words. Tap to hear.</p>
-        )}
-
         {words.map((word, i) => {
           const isHighlighted = highlightIndex === i;
           const isClicked = clickedIndex === i;
           let cls = 'word-token word-boxed';
+          if (isSample) cls += ' word-sample';
           if (isHighlighted) cls += ' word-highlighted';
           if (isClicked) cls += ' word-clicked';
 

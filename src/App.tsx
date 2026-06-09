@@ -1,15 +1,12 @@
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, useRef } from 'react';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 import { useSpeechPlayback } from './hooks/useSpeechPlayback';
 import { usePersistedSettings } from './hooks/usePersistedSettings';
 import { SettingsPanel } from './components/SettingsPanel';
 import { ReadingArea } from './components/ReadingArea';
 import { detectSpeechEnvironment } from './utils/speechEnvironment';
+import { SAMPLE_WORDS, sentenceToWords } from './constants';
 import './App.css';
-
-function transcriptToWords(transcript: string): string[] {
-  return transcript ? transcript.split(/\s+/).filter(Boolean) : [];
-}
 
 function App() {
   const {
@@ -28,6 +25,8 @@ function App() {
 
   const [settings, setSettings] = usePersistedSettings();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const helpSectionRef = useRef<HTMLDivElement>(null);
 
   const speechEnv = useMemo(() => detectSpeechEnvironment(), []);
   const [envWarningDismissed, setEnvWarningDismissed] = useState(false);
@@ -42,23 +41,34 @@ function App() {
     stopReadBack,
   } = useSpeechPlayback({ isListening, startListening, stopListening });
 
-  const words = useMemo(
-    () => transcriptToWords(finalTranscript),
+  const userWords = useMemo(
+    () => sentenceToWords(finalTranscript),
     [finalTranscript],
   );
 
-  const hasReadableContent = words.length > 0 || !!interimTranscript;
+  const showingSample = userWords.length === 0 && !interimTranscript;
+  const displayWords = showingSample ? SAMPLE_WORDS : userWords;
+  const hasUserContent = userWords.length > 0 || !!interimTranscript;
+  const hasReadableContent = displayWords.length > 0 || !!interimTranscript;
 
   const handleReadBack = useCallback(() => {
     const transcript = commitInterim();
-    startReadBack(transcriptToWords(transcript));
+    const fromTranscript = sentenceToWords(transcript);
+    startReadBack(fromTranscript.length > 0 ? fromTranscript : SAMPLE_WORDS);
   }, [commitInterim, startReadBack]);
 
-  const handleClear = useCallback(() => {
+  const handleNew = useCallback(() => {
     stopReadBack();
     stopListening();
     clearTranscript();
   }, [stopReadBack, stopListening, clearTranscript]);
+
+  const openHelp = useCallback(() => {
+    setHelpOpen(true);
+    requestAnimationFrame(() => {
+      helpSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, []);
 
   if (!isSupported) {
     return (
@@ -82,7 +92,17 @@ function App() {
   return (
     <div className="app">
       <header className="top-bar">
-        <h1 className="app-title">Talk &amp; Tap Reading</h1>
+        <div className="top-bar-title">
+          <h1 className="app-title">Talk &amp; Tap Reading</h1>
+          <button
+            type="button"
+            className="help-button"
+            onClick={openHelp}
+            aria-label="Help for parents and teachers"
+          >
+            ?
+          </button>
+        </div>
         {(isListening || isRetrying) && (
           <div
             className={`status-indicator ${isRetrying ? 'retrying' : 'listening'}`}
@@ -147,30 +167,47 @@ function App() {
           )}
 
           <button
-            className="btn btn-clear"
-            onClick={handleClear}
-            disabled={!hasReadableContent}
+            className="btn btn-new"
+            onClick={handleNew}
+            disabled={!hasUserContent}
           >
-            Clear
+            New
           </button>
         </div>
       </div>
 
       <ReadingArea
-        words={words}
+        words={displayWords}
         interimTranscript={interimTranscript}
         highlightIndex={highlightIndex}
         clickedIndex={clickedIndex}
         settings={settings}
+        isSample={showingSample}
         onWordClick={speakWord}
       />
 
       <SettingsPanel
         settings={settings}
         onChange={setSettings}
-        isOpen={settingsOpen}
-        onToggle={() => setSettingsOpen(o => !o)}
+        settingsOpen={settingsOpen}
+        onSettingsToggle={() => setSettingsOpen(o => !o)}
+        helpOpen={helpOpen}
+        onHelpToggle={() => setHelpOpen(o => !o)}
+        helpSectionRef={helpSectionRef}
       />
+
+      <footer className="app-footer">
+        <p>
+          An experimental reading-support tool.{' '}
+          <a
+            href="https://github.com/tlskillman/talk-tap-reading/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Send feedback
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }

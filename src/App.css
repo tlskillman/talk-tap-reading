@@ -19,11 +19,40 @@
   gap: 0.5rem;
 }
 
+.top-bar-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .app-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #1e293b;
   letter-spacing: -0.01em;
+}
+
+.help-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background: white;
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.help-button:hover {
+  border-color: #7c3aed;
+  color: #7c3aed;
 }
 
 .status-indicator {
@@ -232,12 +261,12 @@
   background: #6d28d9;
 }
 
-.btn-clear {
+.btn-new {
   background: transparent;
   color: #6b7280;
   border: 2px solid #d1d5db;
 }
-.btn-clear:hover:not(:disabled) {
+.btn-new:hover:not(:disabled) {
   border-color: #9ca3af;
   color: #374151;
 }
@@ -371,6 +400,36 @@
   border-color: #7c3aed;
 }
 
+.help-content {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.help-prose h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 1rem 0 0.4rem;
+}
+
+.help-prose h3:first-of-type {
+  margin-top: 0;
+}
+
+.help-prose p {
+  margin-bottom: 0.75rem;
+}
+
+.help-prose ol,
+.help-prose ul {
+  margin: 0 0 0.75rem 1.25rem;
+}
+
+.help-prose li {
+  margin-bottom: 0.35rem;
+}
+
 /* ── Reading Card ── */
 
 .reading-card {
@@ -390,18 +449,6 @@
   margin: 0 auto;
   text-align: left;
   width: 100%;
-}
-
-.placeholder-text {
-  color: #9ca3af;
-  font-size: 1.25rem !important;
-  text-align: center;
-  padding: 3rem 1rem;
-  line-height: 1.8;
-}
-
-.placeholder-text strong {
-  color: #6b7280;
 }
 
 /* ── Word Tokens ── */
@@ -439,6 +486,10 @@
   margin: 0.04em;
 }
 
+.word-token.word-sample {
+  color: #6b7280;
+}
+
 .word-token.word-boxed:hover {
   background-color: rgba(124, 58, 237, 0.1);
 }
@@ -473,6 +524,26 @@
 .interim-text {
   color: #9ca3af;
   font-style: italic;
+}
+
+/* ── Footer ── */
+
+.app-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: center;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.app-footer a {
+  color: #7c3aed;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
 }
 
 /* ── Responsive ── */

@@ -1,17 +1,29 @@
 # Talk & Tap Reading
 
-A browser-based reading tool for learners who benefit from seeing spoken words on screen and hearing them back on demand. Speak into the microphone, see each word appear in a tappable box, then tap any word or use **Read** to hear it spoken aloud.
+A small experimental reading-support tool. A child speaks a sentence, sees the words appear, then taps any word to hear it spoken back. The goal is to reinforce the connection between the printed word and the sound of the word.
+
+This is not a medical or educational treatment and does not claim to diagnose or treat dyslexia.
 
 ## Features
 
+- **Tap sample words** — on first visit, tappable demo words appear immediately
 - **Listen** — continuous speech recognition with live interim text
-- **Tap** — hear any word spoken individually
+- **Tap** — hear any word spoken individually, in any order
 - **Read** — sequential read-back with word highlighting
+- **New** — start a fresh sentence
 - **Settings** — adjustable font size, spacing, line width, and dyslexia-friendly fonts (persisted in the browser)
+- **For parents and teachers** — how to use, privacy, and known limitations
 
 ## Browser support
 
-Requires the Web Speech API (speech recognition and synthesis). Works best in **Google Chrome** or **Microsoft Edge** on desktop or tablet. Microphone access and an internet connection are required for speech recognition.
+Requires the Web Speech API (speech recognition and synthesis). Works best in **Google Chrome** or **Microsoft Edge** on desktop or tablet. Microphone access and an internet connection are required for **Listen**. Tap-to-hear and **Read** work without a microphone once words are on screen.
+
+## Privacy
+
+- No server; sentences are not stored or uploaded by this app
+- Display settings are saved in the browser only (`localStorage`)
+- **Listen** sends audio to your browser vendor's cloud speech service (Google in Chrome, Microsoft in Edge)
+- Tap-to-hear and **Read** use your browser's built-in text-to-speech
 
 ## Development
 
@@ -31,3 +43,7 @@ npm run preview # Preview production build locally
 ## Deployment
 
 Pushes to `main` deploy automatically to GitHub Pages at `/talk-tap-reading/`.
+
+## Feedback
+
+[Open an issue](https://github.com/tlskillman/talk-tap-reading/issues) on GitHub.
