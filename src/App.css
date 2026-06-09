@@ -43,29 +43,6 @@
   display: block;
 }
 
-.help-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  border: 2px solid #d1d5db;
-  background: white;
-  color: #6b7280;
-  font-size: 0.95rem;
-  font-weight: 700;
-  font-family: inherit;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0;
-}
-
-.help-button:hover {
-  border-color: #7c3aed;
-  color: #7c3aed;
-}
-
 .status-indicator {
   display: flex;
   align-items: center;

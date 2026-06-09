@@ -77,13 +77,6 @@ function App() {
     clearTranscript();
   }, [stopReadBack, stopListening, clearTranscript]);
 
-  const openHelp = useCallback(() => {
-    setHelpOpen(true);
-    requestAnimationFrame(() => {
-      helpSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }, []);
-
   if (!isSupported) {
     return (
       <div className="app">
@@ -106,7 +99,7 @@ function App() {
   return (
     <div className="app">
       <header className="top-bar">
-        <AppBrand showHelp onHelpClick={openHelp} />
+        <AppBrand />
         {(isListening || isRetrying) && (
           <div
             className={`status-indicator ${isRetrying ? 'retrying' : 'listening'}`}
