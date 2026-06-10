@@ -81,10 +81,10 @@ DNS targets verified against GitHub docs, Jun 2026.
 
 1. Custom domain **talktap.org** — repo config done; switch GoDaddy from
    forwarding to GitHub Pages DNS, then enforce HTTPS (see "Custom domain setup").
-2. Review every word shown to the child from a **dyslexic-reader perspective**
-   (button labels, sample sentence, on-screen text).
-3. Confirm the final **"Send feedback"** email (currently
-   `mailto:tskillman@immsci.com`).
+2. DONE — child-facing wording reviewed: **Talk / Tap / New** labels kept, sample
+   sentence *Talk. See words. Tap to hear.* kept; action buttons enlarged/softened.
+3. DONE — **"Send feedback"** email confirmed as `mailto:tskillman@immsci.com`
+   (kept the personal address; no branded forwarding needed for now).
 
 ## Model comparison takeaway (Opus 4.8 vs Composer 2.5)
 

@@ -6,8 +6,12 @@
    records pointing at GitHub Pages, set the custom domain in GitHub, then enforce
    HTTPS. Full step-by-step in `SESSION_NOTES.md` → "Custom domain setup
    (talktap.org)". (We bought `.org`, not `.app`.)
-2. **Review wording from the dyslexic-user perspective** — reconsider every word
-   shown to the child (button labels, sample sentence, any on-screen text) for a
-   dyslexic reader.
-3. **Email address for "Send Feedback"** — decide the final destination address
-   (current: `mailto:tskillman@immsci.com`).
+2. ~~**Review wording from the dyslexic-user perspective**~~ — DONE. Reviewed all
+   child-facing text; settled on the **Talk / Tap / New** labels (match the app
+   name and the child's actions) and kept the sample sentence *Talk. See words.
+   Tap to hear.* Follow-up polish made the action buttons larger/softer with a
+   more legible disabled state.
+3. ~~**Email address for "Send Feedback"**~~ — DONE. Decided to keep
+   `mailto:tskillman@immsci.com` (already wired in `App.tsx` and README; no
+   branded forwarding address needed for now). Note: GoDaddy's "Email privacy"
+   page is WHOIS-contact privacy only, not a public feedback mailbox.
