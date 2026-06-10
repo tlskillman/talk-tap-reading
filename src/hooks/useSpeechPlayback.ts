@@ -108,7 +108,7 @@ export function useSpeechPlayback({
         }
 
         const utterance = new SpeechSynthesisUtterance(wordsCopy[idx]);
-        utterance.rate = 1.0;
+        utterance.rate = 1.15;
         const currentIdx = idx;
         utterance.onstart = () => {
           if (session !== sessionRef.current) return;

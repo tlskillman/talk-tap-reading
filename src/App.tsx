@@ -33,6 +33,9 @@ function App() {
   const [settings, setSettings] = usePersistedSettings();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  // The demo sentence is a first-visit hint. Once the child has used New, we
+  // don't bring it back — New clears to an empty reading area instead.
+  const [sampleDismissed, setSampleDismissed] = useState(false);
   const helpSectionRef = useRef<HTMLDivElement>(null);
 
   const speechEnv = useMemo(() => detectSpeechEnvironment(), []);
@@ -60,7 +63,8 @@ function App() {
     [finalTranscript],
   );
 
-  const showingSample = userWords.length === 0 && !interimTranscript;
+  const showingSample =
+    userWords.length === 0 && !interimTranscript && !sampleDismissed;
   const displayWords = showingSample ? SAMPLE_WORDS : userWords;
   const hasUserContent = userWords.length > 0 || !!interimTranscript;
   const hasReadableContent = displayWords.length > 0 || !!interimTranscript;
@@ -75,6 +79,7 @@ function App() {
     stopReadBack();
     stopListening();
     clearTranscript();
+    setSampleDismissed(true);
   }, [stopReadBack, stopListening, clearTranscript]);
 
   if (!isSupported) {
@@ -189,7 +194,7 @@ function App() {
             className="btn btn-new"
             onClick={handleNew}
             disabled={!hasUserContent}
-            aria-label="New: start over with sample words"
+            aria-label="New: clear the words and start over"
           >
             <img src={ICON_NEW} alt="" className="btn-label-icon" />
             <span>New</span>

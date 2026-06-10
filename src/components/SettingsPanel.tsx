@@ -83,8 +83,8 @@ function ParentsTeachersContent() {
           highlighting.
         </li>
         <li>
-          Press <strong>New</strong> to clear the sentence and start over with the
-          sample words.
+          Press <strong>New</strong> to clear the sentence and start fresh with an
+          empty space, ready for the child to speak again.
         </li>
       </ol>
 
@@ -102,8 +102,8 @@ function ParentsTeachersContent() {
           <strong>Stop</strong> — ends talking or stops the Tap sequence.
         </li>
         <li>
-          <strong>New</strong> — clears the current sentence and brings back the sample
-          words.
+          <strong>New</strong> — clears the current sentence so the child can start
+          again. (The opening sample words show only on the first visit.)
         </li>
       </ul>
 
