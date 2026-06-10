@@ -42,7 +42,7 @@ npm run preview # Preview production build locally
 
 ## Deployment
 
-Pushes to `main` deploy automatically to GitHub Pages at `/talk-tap-reading/`.
+Pushes to `main` deploy automatically to GitHub Pages, served from the custom domain **https://talktap.org**.
 
 ## Feedback
 

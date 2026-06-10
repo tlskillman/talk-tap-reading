@@ -27,14 +27,60 @@ back.
 
 ## Hosting / URL
 
-- Live at **https://tlskillman.github.io/talk-tap-reading/** (GitHub Pages,
-  `base: '/talk-tap-reading/'`). Pushing to `main` redeploys.
+- Domain **talktap.org** registered at **GoDaddy** (NOT talktap.app — `.org` is
+  what we actually own). GoDaddy is the registrar only; **GitHub Pages is the
+  host** (`base: '/'`, `public/CNAME` → `talktap.org`). Pushing to `main` redeploys.
+- Repo: `github.com/tlskillman/talk-tap-reading`. Until DNS points at GitHub, the
+  site is reachable at the Pages default URL
+  `https://tlskillman.github.io/talk-tap-reading/` (only a fallback for sanity
+  checks; `base: '/'` means it's the apex domain that's the real home).
+- **Initial GoDaddy state (to undo):** GoDaddy's purchase flow set up *domain
+  forwarding* — `http://talktap.org` did a `301` to the github.io subpath, and
+  `https://talktap.org` was broken (forwarding has no valid cert). That's a
+  redirect, not real hosting, and breaks the mic (Web Speech API needs HTTPS).
+  Forwarding also locks the parking `A` records (`15.197.142.173`,
+  `3.33.152.147`) as "Can't delete" until forwarding is turned off.
 - Note: `git push` over HTTP/2 was intermittently failing with `RPC failed; HTTP
   400`. Workaround that worked: `git -c http.version=HTTP/1.1 push origin main`.
 
+## Custom domain setup (talktap.org)
+
+Repo side is done (`base: '/'`, `public/CNAME` → `talktap.org`). Remaining work is
+at GoDaddy (DNS) and in GitHub Pages settings.
+
+1. **Turn OFF GoDaddy Domain Forwarding** (Domain Settings → Forwarding → remove).
+   This unlocks/removes the parking `A` records pointing at GoDaddy's servers.
+2. **Add DNS records** for the apex (`@`) in GoDaddy DNS:
+
+   ```text
+   A     @   185.199.108.153
+   A     @   185.199.109.153
+   A     @   185.199.110.153
+   A     @   185.199.111.153
+   AAAA  @   2606:50c0:8000::153
+   AAAA  @   2606:50c0:8001::153
+   AAAA  @   2606:50c0:8002::153
+   AAAA  @   2606:50c0:8003::153
+   ```
+
+   Keep the `CNAME www → talktap.org` (www → apex is fine). Do **not** leave any
+   other `A`/`AAAA` records on `@`, or GitHub may fail to issue the cert.
+3. **Set the custom domain** in repo **Settings → Pages → Custom domain** =
+   `talktap.org` (the `CNAME` file also sets this on deploy); **Save** to run the
+   DNS check.
+4. **Enable Enforce HTTPS** once the Pages check mark appears (GitHub provisions a
+   Let's Encrypt cert automatically; usually <30 min, up to 24–48h). Unlike `.app`,
+   `.org` does not force HTTPS, so `http://` keeps working during provisioning —
+   but we still enforce HTTPS (required for the microphone / Web Speech API).
+5. **(Recommended) Verify domain ownership** via **Settings → Pages → Verify**
+   (adds a `TXT` record `_github-pages-challenge-tlskillman`) to prevent takeover.
+
+DNS targets verified against GitHub docs, Jun 2026.
+
 ## Open TBDs (see `TBD.md`)
 
-1. Decide on final URL and hosting setup (currently GitHub Pages subpath).
+1. Custom domain **talktap.org** — repo config done; switch GoDaddy from
+   forwarding to GitHub Pages DNS, then enforce HTTPS (see "Custom domain setup").
 2. Review every word shown to the child from a **dyslexic-reader perspective**
    (button labels, sample sentence, on-screen text).
 3. Confirm the final **"Send feedback"** email (currently
